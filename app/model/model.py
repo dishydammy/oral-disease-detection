@@ -27,9 +27,3 @@ def predict_image(model, image_path: str):
         outputs = model(img_tensor)
         predicted_idx = torch.argmax(outputs, dim=1).item()
         return CLASS_NAMES[predicted_idx]
-
-# Example usage
-if __name__ == "__main__":
-    model = load_model("model.pth")
-    result = predict_image(model, "p0155.png")
-    print(result)

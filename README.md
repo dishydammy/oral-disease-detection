@@ -1,52 +1,79 @@
-# 🦷 Oral Disease Detection API
+# 🦷 Oral Disease Detection 
 
-An image classification API powered by a fine-tuned ResNet50 model that helps detect and classify oral diseases from medical images. This project aims to assist clinicians and researchers in early screening and diagnosis of common oral conditions using deep learning.
+## 🧠 Project Overview
+
+An image classification API powered by a fine-tuned ResNet50 model that helps detect and classify oral diseases from histopathological images. This project aims to assist clinicians and researchers in early screening and diagnosis of oral conditions using deep learning and accessible APIs.
+
+The dataset used consists of histopathological images and accompanying clinical and sociodemographic data collected between 2010 and 2021 from patients managed at the Oral Diagnosis Project (NDB) of the Federal University of Espírito Santo (UFES), Brazil. It includes samples from individuals with Oral Squamous Cell Carcinoma (OSCC) and Leukoplakia, represented as with or without epithelial dysplasia. A supplementary dataset of image patches from the original samples was also provided.
 
 ---
 
 ## 🩺 Problem Statement
 
-Oral diseases are among the most prevalent non-communicable diseases globally and are often left undiagnosed in early stages. Delays in diagnosis may lead to severe complications including cancer progression, loss of teeth, and overall poor quality of life.
+Oral diseases are among the most common non-communicable diseases globally and often go undiagnosed during their early stages, especially in low-resource settings. Late detection can lead to serious complications such as cancer progression, functional impairment, tooth loss, and reduced quality of life.
 
-This model is trained to classify medical images into one of three categories:
+This model was trained to classify oral histopathological images into one of three categories:
 
-1. **OSCC (Oral Squamous Cell Carcinoma)**  
-   A type of cancer that arises in the squamous cells lining the oral cavity. Early detection is critical as untreated OSCC can metastasize and become life-threatening.
+* OSCC (Oral Squamous Cell Carcinoma)
+A malignant neoplasm arising in the squamous cells of the oral cavity. Early and accurate diagnosis is crucial because OSCC can metastasize, making it life-threatening if left untreated.
 
-2. **With Dysplasia**  
-   Refers to abnormal but non-cancerous changes in oral tissues. Dysplasia is considered precancerous, and identifying it early helps monitor progression or regression over time.
+* With Dysplasia
+Represents tissue with abnormal cellular changes that are not yet cancerous. Dysplasia is a known precancerous condition and detecting it early helps guide timely monitoring or intervention to prevent progression to carcinoma.
 
-3. **Without Dysplasia**  
-   Refers to normal or benign tissue without signs of dysplasia or carcinoma. Important for establishing healthy baselines or post-treatment monitoring.
+* Without Dysplasia
+Normal or benign tissue without signs of abnormality. This class provides a healthy baseline for comparison and supports clinicians in ruling out malignancy.
+
+While the model currently focuses on image-based predictions, the original dataset also includes rich metadata (such as age, gender, tobacco/alcohol use, lesion type, and more), which presents opportunities for future multi-modal analysis combining image and clinical data for even more accurate predictions.
 
 ---
 
 ## 🧠 Model and Dataset
 
 - **Model**: A fine-tuned [ResNet50](https://arxiv.org/abs/1512.03385) model from PyTorch’s `torchvision.models`.
-- **Training Details**: The model was trained on a medical image dataset with high-quality oral cavity scans.
-- **Dataset Source**: The dataset was obtained from a medical research source. A Google Drive download link will be included here soon.
+- **Training Details**: The model was trained on high-resolution oral cavity images with three target classes.
+- **Dataset Source**: Download available from [Mendeley Data Repository](https://data.mendeley.com/datasets/bbmmm4wgr8/4).
 
 ---
 
 ## ⚙️ API Overview
 
-This project uses **FastAPI** to serve the model for inference.
+This project uses **FastAPI** to serve the trained model for inference.
 
 - **Endpoint**: `POST /predict`
-- **Input**: PNG image of an oral cavity
-- **Output**: Predicted class label (`OSCC`, `with_dysplasia`, `without_dysplasia`) and probability scores
-- **Documentation**: Swagger UI available at `/docs`
+- **Input**:  A histopathological PNG/JPG image file extracted from an oral tissue biopsy
+- **Output**:  
+  - Predicted class label: one of `OSCC`, `with_dysplasia`, or `without_dysplasia`  
+  - Confidence scores for each class
+- **Interactive Documentation**: Visit `http://localhost:8000/docs` when running locally.
 
 ---
 
-## 🧪 How to Use
+## 🚀 Running with Docker
 
-### Run Locally (Setup Instructions Coming Soon)
-> Instructions for setting up with virtual environment and dependencies will be added later.
+You can containerize and run the API locally using Docker:
 
-### Docker Deployment (Planned)
-Deployment using Docker and AWS (Elastic Beanstalk or EC2) is currently in progress. Once live, the public API endpoint will be shared.
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/oral-disease-image-classification.git
+cd oral-disease-image-classification
+```
+
+### 2. Build the Docker Image
+
+```bash
+docker build -t oral-disease-detector .
+```
+
+### 3. Run the Container
+
+```bash
+docker run -p 8000:8000 oral-disease-detector
+```
+
+### 4. Access the API
+* Swagger Docs: http://localhost:8000/docs
+* Click on "Try it out", then upload an image for prediction
 
 ---
 
@@ -61,8 +88,16 @@ oral-disease-image-classification/
 │       ├── model.py            # Model loading and prediction logic
 │       └── model.pth           # Trained PyTorch model
 │
+├── Image_Sort_Notebook.ipnyb   # Notebook for sorting images into class folder
+├── Model_Training.ipnyb        # Notebook for training model
 ├── Dockerfile                  # Docker container definition
 ├── requirements.txt            # Python dependencies
-├── .gitignore                  # Files/folders to ignore in git
+├── .gitignore                  # Git ignore file
 └── README.md                   # Project documentation (this file)
 ```
+
+---
+
+##  Disclaimer
+
+This tool is built for educational and research purposes only and is not a substitute for professional medical diagnosis. Always consult qualified healthcare professionals for clinical decisions.
